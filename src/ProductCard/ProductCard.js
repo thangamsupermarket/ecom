@@ -17,7 +17,6 @@ import { connect } from "react-redux";
 // import { selectedProduct } from './../Redux/actions/selectedProduct';
 import firebase from "firebase";
 
-
 function Alert(props) {
   return (
     <MuiAlert
@@ -32,33 +31,38 @@ function Alert(props) {
 const ProductCard = (props) => {
   const [sideNavBarOpen, setSideNavBarOpen] = useState(false);
   const [openToast, setOpenToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
   const [addToCartText, setAddToCartText] = useState("Add To Cart");
   const addToCartBtnRef = React.useRef(null);
   console.log(props);
   const { selectedProduct } = props;
-  
+
   const addToFirebase = (cart, loggedInUserUID) => {
     const db = firebase.firestore();
-    db.collection("users")
-      .doc(loggedInUserUID)
-      .set({
-        wishlist: cart,
-      })
-      .then((res) => console.log("23", res))
-      .catch((err) => console.log(err));
+    if (loggedInUserUID !== "") {
+      db.collection("users")
+        .doc(loggedInUserUID)
+        .set({
+          wishlist: cart,
+        })
+        .then((res) => console.log("23", res))
+        .catch((err) => console.log(err));
+    }
   };
 
   const addToCart = () => {
     console.log(props);
-    if (props.auth.loggedInUserUI7D === "") {
-      props.history.push("/login-user");
+    if (props.auth.loggedInUserUID === "") {
+      setOpenToast(true);
+      setToastMsg("Please Login First");
+      // props.history.push("/login-user");
     } else {
       const cartArr = props.cart.cart;
       cartArr.push(selectedProduct.product.prodId);
-      
       props.addToCart(cartArr, props.auth.loggedInUserUID);
-      addToFirebase(cartArr, props.auth.loggedInUserUID );
+      addToFirebase(cartArr, props.auth.loggedInUserUID);
       setOpenToast(true);
+      setToastMsg("Added to Cart successfully");
       setAddToCartText("Add To Cart");
       addToCartBtnRef.current.disabled = true;
     }
@@ -159,8 +163,8 @@ const ProductCard = (props) => {
         autoHideDuration={3000}
         onClose={handleToastClose}
       >
-        <Alert onClose={handleToastClose} severity="success">
-          Added to Cart
+        <Alert onClose={handleToastClose} severity={toastMsg === "Please Login First" ? "error" : "success"}>
+          {toastMsg}
         </Alert>
       </Snackbar>
     </div>
