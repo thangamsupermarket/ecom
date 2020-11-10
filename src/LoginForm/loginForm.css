@@ -1,0 +1,9 @@
+div#login-form {
+    margin: auto;
+    text-align: center;
+}
+
+div#login-field {
+    margin: auto;
+    margin-bottom: 15px;
+}
