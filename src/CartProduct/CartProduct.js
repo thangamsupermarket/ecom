@@ -11,6 +11,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import AddBoxRoundedIcon from '@material-ui/icons/AddBoxRounded';
 import IndeterminateCheckBoxRoundedIcon from '@material-ui/icons/IndeterminateCheckBoxRounded';
+import { connect } from 'react-redux';
+import { addToCart } from './../Redux/actions/cartActions';
 
 const CartProductStyles = makeStyles((theme) => ({
   root: {
@@ -39,10 +41,12 @@ const CartProductStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CartProduct(props) {
+const CartProduct = (props) => {
   const [quantity, setQuantity] = React.useState(1);
   const [price, setPrice] = React.useState(props.cartItem.prodPrice);
   const classes = CartProductStyles();
+  const SubtractBtnRef = React.useRef(null);
+  console.log(props);
 
   const addQuantity = () => {
     if (quantity < props.cartItem.prodQuantity) {
@@ -53,13 +57,16 @@ export default function CartProduct(props) {
   };
 
   const minusQuantity = () => {
-    console.log('52', quantity);
     if (quantity > 1) {
       const newQty = quantity - 1;
       setQuantity(newQty);
       setPrice(props.cartItem.prodPrice * newQty);
     }
   };
+
+  const deleteItem = () => {
+    props.deleteItem(props.cartItem.prodId);
+  }
 
   return (
     <>
@@ -78,16 +85,16 @@ export default function CartProduct(props) {
               </Typography>
             </CardContent>
             <div className={classes.controls}>
-              <IconButton onClick={addQuantity} aria-label="previous">
-                <AddBoxRoundedIcon />
-              </IconButton>
-              <IconButton aria-label="play/pause">
-                <p>Qty:{quantity}</p>
-              </IconButton>
-              <IconButton onClick={minusQuantity} aria-label="next">
+              <IconButton ref={SubtractBtnRef} onClick={minusQuantity} aria-label="previous">
                 <IndeterminateCheckBoxRoundedIcon />
               </IconButton>
-              <IconButton onClick={minusQuantity} aria-label="next">
+              <IconButton aria-label="quantity">
+                <p>Qty:{quantity}</p>
+              </IconButton>
+              <IconButton onClick={addQuantity} aria-label="next">
+                <AddBoxRoundedIcon />
+              </IconButton> 
+              <IconButton onClick={deleteItem} aria-label="delete">
                 <DeleteIcon />
               </IconButton>
             </div>
@@ -103,3 +110,13 @@ export default function CartProduct(props) {
     </>
   );
 }
+
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const mapActionsToProps = {
+  addToCart: addToCart,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(CartProduct);

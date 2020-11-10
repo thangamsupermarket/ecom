@@ -1,4 +1,6 @@
-export const addToCart = (cart) => {
+
+
+export const addToCart = (cart, loggedInUserId) => {
     return {
         type: 'ADD_TO_CART',
         payload: {

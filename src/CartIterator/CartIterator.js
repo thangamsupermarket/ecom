@@ -5,7 +5,6 @@ import CartProduct from "../CartProduct/CartProduct";
 const CartIterator = (props) => {
   const [prodPresent, setProductPresent] = useState(false);
   
-  
   useEffect(() => {
     if (props.products.length > 0) {
         setTimeout(()=> {
@@ -14,6 +13,10 @@ const CartIterator = (props) => {
     }
   }, [props.products]);
 
+  const deleteItem = (prodId) => {
+    props.deleteSelectedItem(prodId);
+  }
+
   return (
     <div>
       {prodPresent === true ? (
@@ -21,9 +24,10 @@ const CartIterator = (props) => {
           <CartProduct
             cartItem={prod}
             key={index}
+            deleteItem={deleteItem}
           />
         ))
-      ) : (
+      ) : ( props.emptyCart !== true  ?
         <>
           <div className="column">
             <div className="card">
@@ -67,7 +71,7 @@ const CartIterator = (props) => {
             </div>
           </div>
         </>
-      )}
+      : <h3 style={{marginLeft: '10px'}}>{props.emptyCartMessage}</h3>)}
     </div>
   );
 };
