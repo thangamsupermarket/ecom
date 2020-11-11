@@ -30,6 +30,10 @@ const Header = (props) => {
     props.history.push("/cart");
   };
 
+  const moveToMyProfile = () => {
+    props.history.push('/my-profile');
+  }
+
   return (
     <>
       <Grid container className={"mobile-header"}>
@@ -41,10 +45,10 @@ const Header = (props) => {
         </Grid>
         <Grid container className="social-icons">
           <NotificationsIcon className="icon-item" fontSize="small" />
-          <StyledBadge onClick={moveToCart} badgeContent={props.cart.cart.length} color="secondary">
+          <StyledBadge onClick={moveToCart} badgeContent={props.cart.cart && props.cart.cart.length} color="secondary">
             <ShoppingCartIcon onClick={moveToCart} className="icon-item" fontSize="small" />
           </StyledBadge>
-          <PersonIcon className="icon-item" fontSize="small" />
+          <PersonIcon onClick={moveToMyProfile} className="icon-item" fontSize="small" />
         </Grid>
       </Grid>
     </>

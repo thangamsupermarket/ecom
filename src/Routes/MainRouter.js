@@ -7,6 +7,7 @@ import ProductCard from "../ProductCard/ProductCard";
 import  ViewCart from '../ViewCart/ViewCart';
 import LoginForm from "../LoginForm/LoginForm";
 import SignupForm from './../SignupForm/SignupForm';
+import MyProfile from './../MyProfile/MyProfile';
 const Routing = () => {
   return (
     <React.Fragment>
@@ -23,6 +24,7 @@ const Routing = () => {
           <Route exact path="/cart" render={() => <ViewCart />} />
           <Route exact path="/login-user" render={() => <LoginForm />} />
           <Route exact path="/signup" render={() => <SignupForm />} />
+          <Route exact path="/my-profile" render={() => <MyProfile />} />
           <Route
             render={() => (
               <React.Fragment>

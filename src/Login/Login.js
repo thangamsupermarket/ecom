@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import { selectedProduct } from "./../Redux/actions/selectedProduct";
 import { updateLoggedInUser } from "../Redux/actions/authActions";
 import { addToCart } from "./../Redux/actions/cartActions";
+import { removeProfile, updateProfile } from "../Redux/actions/profileActions";
 
 const Login = (props) => {
   const [sideNavBarOpen, setSideNavBarOpen] = React.useState(false);
@@ -22,27 +23,28 @@ const Login = (props) => {
   }, []);
 
   React.useEffect(() => {
-    console.log(props);
+    // console.log(props);
   }, [props]);
 
   const getCurrentUser = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user !== null && user !== undefined) {
         localStorage.setItem("uid", user.uid);
-        console.log("user", user);
+        // console.log("user", user);
         props.updateLoggedInUser(user.uid);
         fetchCartInfo(user.uid);
       }
       if (user === null || user === undefined) {
         props.addToCart([]);
+        props.removeProfile();
         // props.history.push("/login");
-        console.log("no user");
+        // console.log("no user");
       }
     });
   };
 
   const fetchCartInfo = (uid) => {
-    console.log(uid);
+    // console.log(uid);
     const db = firebase.firestore();
     var recArr = [];
     db.collection("users")
@@ -53,6 +55,7 @@ const Login = (props) => {
         var rec = doc.data();
         recArr = rec.wishlist;
         props.addToCart(doc.data().wishlist);
+        props.updateProfile(doc.data().profile);
       } else {
         console.log("No such document!");
       }
@@ -71,7 +74,7 @@ const Login = (props) => {
           const obj = { ...idObj, ...doc.data() };
           recArr.push(obj);
           setProductsArr(recArr);
-          console.log(recArr);
+          // console.log(recArr);
         });
       });
   };
@@ -86,7 +89,7 @@ const Login = (props) => {
 
   const onProductClick = (prodId) => {
     var selectedProduct = productsArr.filter((item) => item.prodId === prodId);
-    console.log(selectedProduct);
+    // console.log(selectedProduct);
     props.selectedProduct(selectedProduct[0]);
     props.history.push("/product/" + prodId);
   };
@@ -114,8 +117,10 @@ const mapStateToProps = (state) => {
 
 const mapActionsToProps = {
   addToCart: addToCart,
+  removeProfile: removeProfile,
   selectedProduct: selectedProduct,
   updateLoggedInUser: updateLoggedInUser,
+  updateProfile: updateProfile
 };
 
 export default withRouter(connect(mapStateToProps, mapActionsToProps)(Login));

@@ -34,7 +34,7 @@ const ProductCard = (props) => {
   const [toastMsg, setToastMsg] = useState("");
   const [addToCartText, setAddToCartText] = useState("Add To Cart");
   const addToCartBtnRef = React.useRef(null);
-  console.log(props);
+  // console.log(props);
   const { selectedProduct } = props;
 
   const addToFirebase = (cart, loggedInUserUID) => {
@@ -45,13 +45,13 @@ const ProductCard = (props) => {
         .set({
           wishlist: cart,
         })
-        .then((res) => console.log("23", res))
-        .catch((err) => console.log(err));
+        .then((res) => {})
+        .catch((err) => {});
     }
   };
 
   const addToCart = () => {
-    console.log(props);
+    // console.log(props);
     if (props.auth.loggedInUserUID === "") {
       setOpenToast(true);
       setToastMsg("Please Login First");

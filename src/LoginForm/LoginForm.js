@@ -66,12 +66,12 @@ const LoginForm = (props) => {
       .auth()
       .signInWithEmailAndPassword(values.email, values.password)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         props.history.push("/login");
       })
       .catch((err) => {
         setOpenBackDrop(false);
-        console.log(err);
+        // console.log(err);
         if (err.code === "auth/wrong-password") {
           setAuthMessage("The Email or Password is incorrect.");
         }

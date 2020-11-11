@@ -59,7 +59,7 @@ const SignupForm = (props) => {
   };
 
   const handleSignup = () => {
-    console.log(values);
+    // console.log(values);
     setOpenBackDrop(true);
     firebase
       .auth()
@@ -69,7 +69,7 @@ const SignupForm = (props) => {
         props.history.push("/login");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setOpenBackDrop(false);
         if(err.code === "auth/email-already-in-use"){
           setAuthMessage("Email already in use.");

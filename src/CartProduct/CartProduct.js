@@ -46,7 +46,7 @@ const CartProduct = (props) => {
   const [price, setPrice] = React.useState(props.cartItem.prodPrice);
   const classes = CartProductStyles();
   const SubtractBtnRef = React.useRef(null);
-  console.log(props);
+  // console.log(props);
 
   const addQuantity = () => {
     if (quantity < props.cartItem.prodQuantity) {

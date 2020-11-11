@@ -1,39 +1,42 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 // import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 // import InboxIcon from '@material-ui/icons/MoveToInbox';
 // import MailIcon from '@material-ui/icons/Mail';
-import './sideNavBar.css';
-import { createStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
-import { deepOrange, deepPurple } from '@material-ui/core/colors';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import "./sideNavBar.css";
+import { createStyles } from "@material-ui/core/styles";
+import Avatar from "@material-ui/core/Avatar";
+import { deepOrange, deepPurple } from "@material-ui/core/colors";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
 // import AddCircleIcon from '@material-ui/icons/AddCircle';
 import firebase from "firebase";
 
 //Material UI Imports
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { updateLoggedInUser } from './../Redux/actions/authActions';
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { updateLoggedInUser } from "./../Redux/actions/authActions";
+import InfoIcon from "@material-ui/icons/Info";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import LocalMallIcon from "@material-ui/icons/LocalMall";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import VpnKeyIcon from "@material-ui/icons/VpnKey";
 
 const useStyles = makeStyles({
   list: {
     width: 250,
   },
   fullList: {
-    width: 'auto',
+    width: "auto",
   },
 });
 
@@ -41,8 +44,8 @@ const useStyles = makeStyles({
 const avatarStyles = makeStyles((theme) =>
   createStyles({
     root: {
-      display: 'flex',
-      '& > *': {
+      display: "flex",
+      "& > *": {
         margin: theme.spacing(1),
       },
     },
@@ -54,10 +57,10 @@ const avatarStyles = makeStyles((theme) =>
       color: theme.palette.getContrastText(deepPurple[500]),
       backgroundColor: deepPurple[500],
     },
-  }),
+  })
 );
 
-//For Card Avatar 
+//For Card Avatar
 const cardStyles = makeStyles((theme) =>
   createStyles({
     root: {
@@ -65,48 +68,50 @@ const cardStyles = makeStyles((theme) =>
     },
     media: {
       height: 0,
-      paddingTop: '56.25%', // 16:9
+      paddingTop: "56.25%", // 16:9
     },
     expand: {
-      transform: 'rotate(0deg)',
-      marginLeft: 'auto',
-      transition: theme.transitions.create('transform', {
+      transform: "rotate(0deg)",
+      marginLeft: "auto",
+      transition: theme.transitions.create("transform", {
         duration: theme.transitions.duration.shortest,
       }),
     },
     expandOpen: {
-      transform: 'rotate(180deg)',
+      transform: "rotate(180deg)",
     },
     avatar: {
-      backgroundColor: 'red',
+      backgroundColor: "red",
     },
-  }),
+  })
 );
 
- const SwipeableTemporaryDrawer = (props) => {
+const SwipeableTemporaryDrawer = (props) => {
   const classes = useStyles();
   const avatarClasses = avatarStyles();
   const cardClasses = cardStyles();
-
+  
   const moveToProfile = () => {
-    
-  }
+    if (props.auth.loggedInUserUID !== "") {
+      props.history.push("/my-profile");
+    } else {
+      // console.log('display toast here');
+    }
+  };
 
   const moveToCart = () => {
-    props.history.push('/cart');
-  }
+    if (props.auth.loggedInUserUID !== "") {
+      props.history.push("/cart");
+    } else {
+      // console.log('display toast here');
+    }
+  };
 
-  const moveToMyRequests = () => {
-    
-  }
-  
-  const moveToRaiseRequest = () => {
-   
-  }
+  const moveToMyRequests = () => {};
 
-  const moveToNotifications = () => {
-    
-  }
+  const moveToRaiseRequest = () => {};
+
+  const moveToNotifications = () => {};
 
   const logoutUser = (e) => {
     firebase
@@ -114,7 +119,7 @@ const cardStyles = makeStyles((theme) =>
       .signOut()
       .then(() => {
         // localStorage.removeItem("uid");
-        props.updateLoggedInUser('');
+        props.updateLoggedInUser("");
         props.history.push("/login"); //Move to Login Route on Logout
       })
       .catch(function (error) {
@@ -123,81 +128,114 @@ const cardStyles = makeStyles((theme) =>
   };
 
   const loginUser = () => {
-    props.history.push('/login-user');
-  }
+    props.history.push("/login-user");
+  };
 
   const list = () => (
     <div
       className={classes.list}
       role="presentation"
-      onClick={()=> props.onClickAway()}
-      onKeyDown={()=>props.onClickAway()}>
+      onClick={() => props.onClickAway()}
+      onKeyDown={() => props.onClickAway()}
+    >
       <List>
-          <ListItem onClick={moveToProfile}>
-            <ListItemIcon><AccountBoxIcon /></ListItemIcon>
-            <ListItemText>My Profile</ListItemText>
-          </ListItem>
-          <ListItem onClick={moveToCart}>
-            <ListItemIcon><AccountBoxIcon /></ListItemIcon>
-            <ListItemText>My Cart</ListItemText>
-          </ListItem>
-          <ListItem onClick={moveToMyRequests}>
-            <ListItemIcon><AddBoxIcon /></ListItemIcon>
-            <ListItemText>My Orders</ListItemText>
-          </ListItem>
-          <ListItem onClick={moveToRaiseRequest}>
-            <ListItemIcon><AddBoxIcon /></ListItemIcon>
-            <ListItemText>My Wishlist</ListItemText>
-          </ListItem>
-          <ListItem onClick={moveToNotifications}>
-            <ListItemIcon><NotificationsIcon /></ListItemIcon>
-            <ListItemText>Contact Shop Owner</ListItemText>
-          </ListItem>
+        {props.auth.loggedInUserUID !== "" ? (
+          <>
+            <ListItem onClick={moveToProfile}>
+              <ListItemIcon>
+                <AccountBoxIcon />
+              </ListItemIcon>
+              <ListItemText>My Profile</ListItemText>
+            </ListItem>
+            <ListItem onClick={moveToCart}>
+              <ListItemIcon>
+                <ShoppingCartIcon />
+              </ListItemIcon>
+              <ListItemText>My Cart</ListItemText>
+            </ListItem>
+            <ListItem onClick={moveToMyRequests}>
+              <ListItemIcon>
+                <LocalMallIcon />
+              </ListItemIcon>
+              <ListItemText>My Orders</ListItemText>
+            </ListItem>
+            <ListItem onClick={moveToRaiseRequest}>
+              <ListItemIcon>
+                <FavoriteIcon />
+              </ListItemIcon>
+              <ListItemText>My Wishlist</ListItemText>
+            </ListItem>{" "}
+          </>
+        ) : null}
+        <ListItem onClick={moveToNotifications}>
+          <ListItemIcon>
+            <InfoIcon />
+          </ListItemIcon>
+          <ListItemText>Contact Shop Owner</ListItemText>
+        </ListItem>
+        {props.auth.loggedInUserUID !== "" ? (
           <ListItem onClick={logoutUser}>
-            <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
             <ListItemText>Logout</ListItemText>
           </ListItem>
+        ) : null}
+        {props.auth.loggedInUserUID === "" ? (
           <ListItem onClick={loginUser}>
-            <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+            <ListItemIcon>
+              <VpnKeyIcon />
+            </ListItemIcon>
             <ListItemText>Login</ListItemText>
           </ListItem>
+        ) : null}
       </List>
       <Divider />
-      <List>
-      </List>
+      <List></List>
     </div>
   );
 
   return (
     <div>
-        <ErrorBoundary>
+      <ErrorBoundary>
         <React.Fragment>
           <SwipeableDrawer
             anchor="left"
             className={avatarClasses.root}
             open={props.open}
-            onClose={()=>props.onClickAway()}
-            onOpen={()=> {console.log();}}
+            onClose={() => props.onClickAway()}
+            onOpen={() => {
+              // console.log();
+            }}
           >
-              <div>&nbsp;</div>
-              <div>&nbsp;</div>
-              <Card className={cardClasses.root}>
-                  <CardHeader avatar={
-                    <Avatar aria-label="recipe" className={cardClasses.avatar}>
-                        LP
-                    </Avatar>
-                    
-                    }
-                    title="Livingstone P"
-                    subheader="O+ve Person"/>
-              </Card>
-              {list()}
+            <div>&nbsp;</div>
+            <div>&nbsp;</div>
+            <Card className={cardClasses.root}>
+              <CardHeader
+                avatar={
+                  <Avatar aria-label="recipe" className={cardClasses.avatar}>
+                    {props.profile.name && props.profile.name[0]}
+                  </Avatar>
+                }
+                title={props.profile.name}
+                subheader={
+                  <span>
+                    {" "}
+                    {props.profile.name
+                      ? "Verified Customer"
+                      : "Unknown User"}{" "}
+                  </span>
+                }
+              />
+            </Card>
+            {list()}
           </SwipeableDrawer>
         </React.Fragment>
-        </ErrorBoundary>
+      </ErrorBoundary>
+      
     </div>
   );
-}
+};
 
 const mapStateToProps = (state) => {
   return state;
@@ -207,4 +245,6 @@ const mapActionsToProps = {
   updateLoggedInUser: updateLoggedInUser,
 };
 
-export default withRouter(connect(mapStateToProps, mapActionsToProps)(SwipeableTemporaryDrawer));
+export default withRouter(
+  connect(mapStateToProps, mapActionsToProps)(SwipeableTemporaryDrawer)
+);

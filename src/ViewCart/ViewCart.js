@@ -48,7 +48,7 @@ const ViewCart = (props) => {
             setProductsArr(recArr);
           });
         });
-      console.log(recArr);
+      // console.log(recArr);
     });
   };
 
@@ -61,11 +61,11 @@ const ViewCart = (props) => {
   };
 
   const deleteCartItem = (prodId) => {
-    console.log(prodId);
+    // console.log(prodId);
     const index = props.cart.cart.indexOf(prodId);
     const cart = props.cart.cart;
-    console.log(cart);
-    console.log(index);
+    // console.log(cart);
+    // console.log(index);
     cart.splice(index, 1);
     productsArr.splice(index, 1);
     setDeleteFlag(!deleteFlag);
@@ -80,8 +80,8 @@ const ViewCart = (props) => {
       .set({
         wishlist: cart,
       })
-      .then((res) => console.log("23", res))
-      .catch((err) => console.log(err));
+      .then((res) =>{})
+      .catch((err) => {});
   };
 
   return (
