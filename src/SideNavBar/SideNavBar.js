@@ -30,7 +30,6 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 const useStyles = makeStyles({
   list: {
@@ -132,10 +131,6 @@ const SwipeableTemporaryDrawer = (props) => {
     props.history.push("/login-user");
   };
 
-  const signUp = () => {
-    props.history.push("/signup");
-  }
-
   const list = () => (
     <div
       className={classes.list}
@@ -187,20 +182,12 @@ const SwipeableTemporaryDrawer = (props) => {
           </ListItem>
         ) : null}
         {props.auth.loggedInUserUID === "" ? (
-          <>
           <ListItem onClick={loginUser}>
             <ListItemIcon>
               <VpnKeyIcon />
             </ListItemIcon>
             <ListItemText>Login</ListItemText>
           </ListItem>
-           <ListItem onClick={signUp}>
-           <ListItemIcon>
-             <PersonAddIcon />
-           </ListItemIcon>
-           <ListItemText>Signup</ListItemText>
-         </ListItem>
-         </>
         ) : null}
       </List>
       <Divider />

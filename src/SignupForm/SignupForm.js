@@ -18,7 +18,6 @@ import IconButton from "@material-ui/core/IconButton";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import '../LoginForm/loginForm.css';
-
 const useStylesBackDrop = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -90,7 +89,7 @@ const SignupForm = (props) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Header openSideNavBar={openSideNavBar} {...props} />
-          {/* <SearchBar /> */}
+          <SearchBar />
         </Grid>
         <div id="login-form">
           <form>

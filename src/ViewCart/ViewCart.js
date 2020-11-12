@@ -12,45 +12,18 @@ import { addToCart } from "./../Redux/actions/cartActions";
 
 const ViewCart = (props) => {
   const [productsArr, setProductsArr] = React.useState([]);
-  const [allProductsArr, setAllProductsArr] = React.useState([]);
   const [sideNavBarOpen, setSideNavBarOpen] = useState(false);
   // setDeleteFlag(!deleteFlag);
   const [deleteFlag, setDeleteFlag] = useState(false);
   const [emptyCartMsg, setEmptyCartMsg] = useState("");
   const [isCartEmpty, setIsCartEmpty] = useState(false);
   const [dummyValue, setDummyValue] = useState(false);
-  
   React.useEffect(() => {
     getData();
-    getProductsData();
-    console.log('cart Props', props);
+    console.log(props);
     setIsCartEmpty(props.cart.cart.length === 0 ? true : false);
     setEmptyCartMsg(props.auth.loggedInUserUID === "" ? "Please login to see your cart": "No Items in Your cart");
   }, []);
-
-  const updateProducts = (products) => {
-    setAllProductsArr(products);
-    props.updateProducts(products);
-  }
-
-  const getProductsData = () => {
-    if(props.products !== undefined && props.products.length !== 0) {
-      return;
-    }
-    var db = firebase.firestore();
-    var recArr = [];
-    db.collection("products")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          const idObj = { id: doc.id };
-          const obj = { ...idObj, ...doc.data() };
-          recArr.push(obj);
-          updateProducts(recArr);
-        });
-      });
-  };
-
 
   // React.useEffect( ()=> {
   //   console.log("cart length", props.cart.cart.length);;
@@ -116,10 +89,11 @@ const ViewCart = (props) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Header openSideNavBar={openSideNavBar} {...props} />
-          <SearchBar products={props.products.length !== 0 ? props.products : allProductsArr}/>
+          <SearchBar />
         </Grid>
         <div>
-          {/* <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Cart:</h3> */}
+          <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Cart:</h3>
+
           <CartIterator
             onClick={() => {}}
             products={productsArr}

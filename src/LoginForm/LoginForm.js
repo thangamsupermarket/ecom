@@ -94,7 +94,7 @@ const LoginForm = (props) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Header openSideNavBar={openSideNavBar} {...props} />
-          {/* <SearchBar /> */}
+          <SearchBar />
         </Grid>
         <div id="login-form">
           <form>

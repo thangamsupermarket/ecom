@@ -8,8 +8,6 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Badge from "@material-ui/core/Badge";
 import { withStyles } from "@material-ui/core/styles";
-import Snackbar  from '@material-ui/core/Snackbar';
-import Alert from "@material-ui/lab/Alert";
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -20,13 +18,6 @@ const StyledBadge = withStyles((theme) => ({
 }))(Badge);
 
 const Header = (props) => {
-
-  const [openToast, setOpenToast] = React.useState(false);
-
-  const handleToastClose = () => {
-    setOpenToast(false);
-  };
-
   const openSideNavBar = () => {
     props.openSideNavBar();
   };
@@ -36,26 +27,11 @@ const Header = (props) => {
   };
 
   const moveToCart = () => {
-    if(props.auth.loggedInUserUID !== ""){
-      props.history.push("/cart");
-    }
-    else{
-      setOpenToast(true);
-    }
-   
+    props.history.push("/cart");
   };
 
-  
-
-
   const moveToMyProfile = () => {
-    if(props.auth.loggedInUserUID !== ""){
-      props.history.push('/my-profile');
-    }
-    else{
-      setOpenToast(true);
-    }
-    
+    props.history.push('/my-profile');
   }
 
   return (
@@ -75,16 +51,6 @@ const Header = (props) => {
           <PersonIcon onClick={moveToMyProfile} className="icon-item" fontSize="small" />
         </Grid>
       </Grid>
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        open={openToast}
-        autoHideDuration={3000}
-        onClose={handleToastClose}
-      >
-        <Alert variant="filled" onClose={handleToastClose} severity={"error"}>
-          Please Login First
-        </Alert>
-      </Snackbar>
     </>
   );
 };
