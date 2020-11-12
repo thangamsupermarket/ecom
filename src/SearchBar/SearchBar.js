@@ -53,7 +53,7 @@ const SearchBar = (props) => {
           </button>
           {props.products !== undefined && props.products.length !== 0 && (
             <datalist id="browsers">
-              {props.products.map((item, index)=> <option key={index} value={item.prodName}/>)}
+              {props.products.map((item, index)=> { return <option key={index} value={item.prodName}/> })}
             </datalist>
           )}
         </div>
