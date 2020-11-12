@@ -8,7 +8,10 @@ import  ViewCart from '../ViewCart/ViewCart';
 import LoginForm from "../LoginForm/LoginForm";
 import SignupForm from './../SignupForm/SignupForm';
 import MyProfile from './../MyProfile/MyProfile';
-const Routing = () => {
+import SearchPage from "../SearchPage/SearchPage";
+
+const Routing = (props) => {
+
   return (
     <React.Fragment>
       <HashRouter basename="/">
@@ -25,6 +28,7 @@ const Routing = () => {
           <Route exact path="/login-user" render={() => <LoginForm />} />
           <Route exact path="/signup" render={() => <SignupForm />} />
           <Route exact path="/my-profile" render={() => <MyProfile />} />
+          <Route exact path="/search" render={() => <SearchPage />} />
           <Route
             render={() => (
               <React.Fragment>

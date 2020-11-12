@@ -14,7 +14,6 @@ import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import { addToCart } from "./../Redux/actions/cartActions";
 import { connect } from "react-redux";
-// import { selectedProduct } from './../Redux/actions/selectedProduct';
 import firebase from "firebase";
 
 function Alert(props) {
@@ -34,8 +33,12 @@ const ProductCard = (props) => {
   const [toastMsg, setToastMsg] = useState("");
   const [addToCartText, setAddToCartText] = useState("Add To Cart");
   const addToCartBtnRef = React.useRef(null);
-  // console.log(props);
+  const [allProductsArr, setAllProductsArr] = React.useState([]);
   const { selectedProduct } = props;
+
+  React.useEffect(() => {
+    getProductsData();
+  }, []);
 
   const addToFirebase = (cart, loggedInUserUID) => {
     const db = firebase.firestore();
@@ -51,11 +54,9 @@ const ProductCard = (props) => {
   };
 
   const addToCart = () => {
-    // console.log(props);
     if (props.auth.loggedInUserUID === "") {
       setOpenToast(true);
       setToastMsg("Please Login First");
-      // props.history.push("/login-user");
     } else {
       const cartArr = props.cart.cart;
       cartArr.push(selectedProduct.product.prodId);
@@ -84,12 +85,36 @@ const ProductCard = (props) => {
     props.history.push("/cart");
   };
 
+  const updateProducts = (products) => {
+    setAllProductsArr(products);
+    props.updateProducts(products);
+  }
+
+  const getProductsData = () => {
+    if(props.products !== undefined && props.products.length !== 0) {
+      return;
+    }
+    var db = firebase.firestore();
+    var recArr = [];
+    db.collection("products")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const idObj = { id: doc.id };
+          const obj = { ...idObj, ...doc.data() };
+          recArr.push(obj);
+          updateProducts(recArr);
+        });
+      });
+  };
+
+
   return (
     <div>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Header openSideNavBar={openSideNavBar} {...props} />
-          <SearchBar />
+          <SearchBar products={props.products.length !== 0 ? props.products : allProductsArr} />
         </Grid>
       </Grid>
 
