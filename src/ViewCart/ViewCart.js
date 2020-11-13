@@ -9,9 +9,11 @@ import firebase from "firebase";
 import CartIterator from "../CartIterator/CartIterator";
 // import './viewcart.css';
 import { addToCart } from "./../Redux/actions/cartActions";
+import { updateProducts } from './../Redux/actions/productsActions';
 
 const ViewCart = (props) => {
   const [productsArr, setProductsArr] = React.useState([]);
+  const [allProductsArr, setAllProductsArr] = React.useState([]);
   const [sideNavBarOpen, setSideNavBarOpen] = useState(false);
   // setDeleteFlag(!deleteFlag);
   const [deleteFlag, setDeleteFlag] = useState(false);
@@ -21,8 +23,13 @@ const ViewCart = (props) => {
   React.useEffect(() => {
     getData();
     console.log(props);
+    getAllProductsData();
     setIsCartEmpty(props.cart.cart.length === 0 ? true : false);
-    setEmptyCartMsg(props.auth.loggedInUserUID === "" ? "Please login to see your cart": "No Items in Your cart");
+    setEmptyCartMsg(
+      props.auth.loggedInUserUID === ""
+        ? "Please login to see your cart"
+        : "No Items in Your cart"
+    );
   }, []);
 
   // React.useEffect( ()=> {
@@ -31,6 +38,27 @@ const ViewCart = (props) => {
   //   setEmptyCartMsg(props.cart.cart.length === 0 ? "No Items in Your cart ": "" );
   //   setDummyValue(!dummyValue);
   // }, [props]);
+
+  const getAllProductsData = () => {
+    if (props.products.length !== 0) {
+      return;
+    } else {
+      var db = firebase.firestore();
+      var recArr = [];
+      db.collection("products")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const idObj = { id: doc.id };
+            const obj = { ...idObj, ...doc.data() };
+            recArr.push(obj);
+            setAllProductsArr(recArr);
+            props.updateProducts(recArr);
+            // console.log(recArr);
+          });
+        });
+    }
+  };
 
   const getData = () => {
     var db = firebase.firestore();
@@ -80,7 +108,7 @@ const ViewCart = (props) => {
       .set({
         wishlist: cart,
       })
-      .then((res) =>{})
+      .then((res) => {})
       .catch((err) => {});
   };
 
@@ -89,7 +117,7 @@ const ViewCart = (props) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Header openSideNavBar={openSideNavBar} {...props} />
-          <SearchBar />
+          <SearchBar products={props.products.length !== 0 ?props.products : allProductsArr}   />
         </Grid>
         <div>
           <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Cart:</h3>
@@ -117,6 +145,7 @@ const mapStateToProps = (state) => {
 
 const mapActionsToProps = {
   addToCart: addToCart,
+  updateProducts: updateProducts
 };
 
 export default withRouter(

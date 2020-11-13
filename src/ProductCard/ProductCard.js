@@ -32,10 +32,35 @@ const ProductCard = (props) => {
   const [sideNavBarOpen, setSideNavBarOpen] = useState(false);
   const [openToast, setOpenToast] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
+  const [allProductsArr, setAllProductsArr] = React.useState([]);
   const [addToCartText, setAddToCartText] = useState("Add To Cart");
   const addToCartBtnRef = React.useRef(null);
-  // console.log(props);
   const { selectedProduct } = props;
+
+  React.useEffect(() => {
+    getAllProductsData();
+  }, []);
+
+  const getAllProductsData = () => {
+    if (props.products.length !== 0) {
+      return;
+    } else {
+      var db = firebase.firestore();
+      var recArr = [];
+      db.collection("products")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const idObj = { id: doc.id };
+            const obj = { ...idObj, ...doc.data() };
+            recArr.push(obj);
+            setAllProductsArr(recArr);
+            props.updateProducts(recArr);
+            // console.log(recArr);
+          });
+        });
+    }
+  };
 
   const addToFirebase = (cart, loggedInUserUID) => {
     const db = firebase.firestore();
@@ -89,7 +114,7 @@ const ProductCard = (props) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Header openSideNavBar={openSideNavBar} {...props} />
-          <SearchBar />
+          <SearchBar  products={props.products.length !== 0 ? props.products : allProductsArr} />
         </Grid>
       </Grid>
 

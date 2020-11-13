@@ -12,6 +12,7 @@ import { selectedProduct } from "./../Redux/actions/selectedProduct";
 import { updateLoggedInUser } from "../Redux/actions/authActions";
 import { addToCart } from "./../Redux/actions/cartActions";
 import { removeProfile, updateProfile } from "../Redux/actions/profileActions";
+import { updateProducts } from './../Redux/actions/productsActions';
 
 const Login = (props) => {
   const [sideNavBarOpen, setSideNavBarOpen] = React.useState(false);
@@ -32,6 +33,7 @@ const Login = (props) => {
         localStorage.setItem("uid", user.uid);
         // console.log("user", user);
         props.updateLoggedInUser(user.uid);
+        
         fetchCartInfo(user.uid);
       }
       if (user === null || user === undefined) {
@@ -64,6 +66,11 @@ const Login = (props) => {
   }
 
   const getData = () => {
+    console.log('69',props.products);
+    if(props.products.length !== 0){
+      setProductsArr(props.products);
+      return;
+    }
     var db = firebase.firestore();
     var recArr = [];
     db.collection("products")
@@ -74,6 +81,7 @@ const Login = (props) => {
           const obj = { ...idObj, ...doc.data() };
           recArr.push(obj);
           setProductsArr(recArr);
+          props.updateProducts(recArr);
           // console.log(recArr);
         });
       });
@@ -99,8 +107,8 @@ const Login = (props) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Header openSideNavBar={openSideNavBar} {...props} />
-          <SearchBar />
-          <ProductsIterator onClick={onProductClick} products={productsArr} />
+          <SearchBar products={props.products.length !== 0 ?props.products : productsArr} />
+          <ProductsIterator onClick={onProductClick} products={props.products.length !== 0 ?props.products : productsArr} />
         </Grid>
       </Grid>
       <SwipeableTemporaryDrawer
@@ -120,6 +128,7 @@ const mapActionsToProps = {
   removeProfile: removeProfile,
   selectedProduct: selectedProduct,
   updateLoggedInUser: updateLoggedInUser,
+  updateProducts: updateProducts,
   updateProfile: updateProfile
 };
 

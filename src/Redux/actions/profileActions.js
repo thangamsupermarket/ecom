@@ -1,4 +1,5 @@
 export const updateProfile = (profileInfo) => {
+   console.log(profileInfo);
   return {
     type: "USER_PROFILE_UPDATE_ACTION",
     payload: {

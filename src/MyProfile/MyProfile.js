@@ -13,6 +13,7 @@ import './myprofile.css';
 // import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import { updateProfile } from './../Redux/actions/profileActions';
 
 const MyProfile = (props) => {
   const [sideNavBarOpen, setSideNavBarOpen] = React.useState(false);
@@ -64,6 +65,7 @@ const MyProfile = (props) => {
 
   const updateProfile = () => {
     const db = firebase.firestore();
+    props.updateProfile(values);
     if (props.auth.loggedInUserUID !== "") {
       db.collection("users")
         .doc(props.auth.loggedInUserUID)
@@ -219,10 +221,10 @@ const mapStateToProps = (state) => {
   return state;
 };
 
-// const mapActionsToProps = {
-//   updateLoggedInUser: updateLoggedInUser,
-// };
+const mapActionsToProps = {
+  updateProfile: updateProfile,
+};
 
 export default withRouter(
-  connect(mapStateToProps, null)(MyProfile)
+  connect(mapStateToProps, mapActionsToProps)(MyProfile)
 );

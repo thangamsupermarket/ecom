@@ -8,6 +8,20 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Badge from "@material-ui/core/Badge";
 import { withStyles } from "@material-ui/core/styles";
+import { Snackbar } from "@material-ui/core";
+import  MuiAlert  from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return (
+    <MuiAlert
+      style={{ marginTop: "2px" }}
+      elevation={6}
+      variant="filled"
+      {...props}
+    />
+  );
+}
+
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -18,6 +32,12 @@ const StyledBadge = withStyles((theme) => ({
 }))(Badge);
 
 const Header = (props) => {
+  const [openToast, setOpenToast] = React.useState(false);
+
+  const handleToastClose = () => {
+    setOpenToast(false);
+  };
+
   const openSideNavBar = () => {
     props.openSideNavBar();
   };
@@ -27,12 +47,17 @@ const Header = (props) => {
   };
 
   const moveToCart = () => {
-    props.history.push("/cart");
+    if (props.auth.loggedInUserUID !== "") {
+      props.history.push("/cart");
+    } else {setOpenToast(true);}
   };
 
   const moveToMyProfile = () => {
-    props.history.push('/my-profile');
-  }
+    if (props.auth.loggedInUserUID !== ""){
+      props.history.push("/my-profile");
+    }
+    else {setOpenToast(true);}
+  };
 
   return (
     <>
@@ -45,12 +70,34 @@ const Header = (props) => {
         </Grid>
         <Grid container className="social-icons">
           <NotificationsIcon className="icon-item" fontSize="small" />
-          <StyledBadge onClick={moveToCart} badgeContent={props.cart.cart && props.cart.cart.length} color="secondary">
-            <ShoppingCartIcon onClick={moveToCart} className="icon-item" fontSize="small" />
+          <StyledBadge
+            onClick={moveToCart}
+            badgeContent={props.cart.cart && props.cart.cart.length}
+            color="secondary"
+          >
+            <ShoppingCartIcon
+              onClick={moveToCart}
+              className="icon-item"
+              fontSize="small"
+            />
           </StyledBadge>
-          <PersonIcon onClick={moveToMyProfile} className="icon-item" fontSize="small" />
+          <PersonIcon
+            onClick={moveToMyProfile}
+            className="icon-item"
+            fontSize="small"
+          />
         </Grid>
       </Grid>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={openToast}
+        autoHideDuration={3000}
+        onClose={handleToastClose}
+      >
+        <Alert variant="filled" onClose={handleToastClose} severity={"error"}>
+          Please Login First
+        </Alert>
+      </Snackbar>
     </>
   );
 };
