@@ -3,7 +3,7 @@ const initState = {
     products: []
 }
 
-const productsReducer = (state=initState, action) =>
+const productsReducer = (state=[], action) =>
 {
     if(action.type === 'PRODUCTS_UPDATE_PRODUCTS')
     {

@@ -65,7 +65,8 @@ const SearchPage = (props) => {
       />
           <div>
     <h3>'{searchRecords.length}' result(s) for {decodeURI(props.location.search.split("=")[1])}</h3>
-          <ProductsIterator onClick={onProductClick} products={searchRecords} />
+    {searchRecords.length !== 0 && <ProductsIterator onClick={onProductClick} products={searchRecords} /> }
+    {searchRecords.length === 0 && <p>No Items found. Try a different search</p> }
           </div>
          
         </Grid>

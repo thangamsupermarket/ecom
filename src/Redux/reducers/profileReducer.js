@@ -2,7 +2,7 @@ const initState = {
     profile: {}
 }
 
-const profileReducer = (state=initState, action) =>
+const profileReducer = (state={}, action) =>
 {
     if(action.type === 'USER_PROFILE_UPDATE_ACTION')
     {
