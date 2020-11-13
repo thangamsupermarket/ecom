@@ -69,7 +69,7 @@ const ProductCard = (props) => {
         .doc(loggedInUserUID)
         .set({
           wishlist: cart,
-        })
+        },  { merge: true })
         .then((res) => {})
         .catch((err) => {});
     }
