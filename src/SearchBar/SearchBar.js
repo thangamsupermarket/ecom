@@ -51,7 +51,7 @@ const SearchBar = (props) => {
           <button onClick={onSearchClick} type="submit" className="searchButton">
             <SearchTwoToneIcon fontSize="small" />
           </button>
-          {props.products !== undefined && props.products.length !== 0 && (
+          {props.products.length !== 0 && (
             <datalist id="browsers">
               <option key={'123'} value={null} />
               {props.products.map((item, index)=> <option key={index} value={item.prodName}/>)}
