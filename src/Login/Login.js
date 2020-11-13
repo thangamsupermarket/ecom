@@ -67,10 +67,10 @@ const Login = (props) => {
 
   const getData = () => {
     console.log('69',props.products);
-    if(props.products.length !== 0){
-      setProductsArr(props.products);
-      return;
-    }
+    // if(props.products.length !== 0){
+    //   setProductsArr(props.products);
+    //   return;
+    // }
     var db = firebase.firestore();
     var recArr = [];
     db.collection("products")
